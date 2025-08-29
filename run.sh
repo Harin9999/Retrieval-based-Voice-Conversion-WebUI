@@ -50,6 +50,20 @@ else
   fi
 fi
 
+# Ensure aria2 is installed for model downloads
+if ! command -v aria2c >/dev/null 2>&1; then
+  echo "aria2 not found. Attempting to install..."
+  if [ "$(uname)" = "Darwin" ] && command -v brew >/dev/null 2>&1; then
+    brew install aria2
+  elif [ "$(uname)" = "Linux" ] && command -v apt-get >/dev/null 2>&1; then
+    sudo apt-get update
+    sudo apt-get install -y aria2
+  else
+    echo "Please install aria2 manually."
+    exit 1
+  fi
+fi
+
 # Download models
 chmod +x tools/dlmodels.sh
 ./tools/dlmodels.sh
